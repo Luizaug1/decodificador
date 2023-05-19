@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width">
+    <title>Codificador/Decodificador de Texto</title>
+   
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <h1>Codificador/Decodificador de Texto</h1>
+    <label for="textoOriginal">Texto Original:</label>
+    <textarea id="textoOriginal" placeholder="Insira o texto a ser codificado ou decodificado" rows="5"></textarea>
+
+    <label for="tipoCodificacao">Tipo de Codificação:</label>
+    <select id="tipoCodificacao">
+        <option value="base64">Base64</option>
+        <option value="url">URL</option>
+        <option value="html">HTML</option>
+    </select>
+
+    <label for="tipoOperacao">Tipo de Operação:</label>
+    <select id="tipoOperacao">
+        <option value="codificar">Codificar</option>
+        <option value="decodificar">Decodificar</option>
+    </select>
+
+    <button onclick="codificarOuDecodificarTexto()">Executar</button>
+
+    <div id="resultado">
+        <label for="textoCodificadoDecodificado">Texto Codificado/Decodificado:</label>
+        <textarea id="textoCodificadoDecodificado" rows="5" readonly></textarea>
+    </div>
+
+    <script>
+        // Função para codificar ou decodificar o texto com base no tipo de codificação e operação selecionados
+        function codificarOuDecodificarTexto() {
+            const textoOriginal = document.getElementById("textoOriginal").value;
+            const tipoCodificacao = document.getElementById("tipoCodificacao").value;
+            const tipoOperacao = document.getElementById("tipoOperacao").value;
+            let textoCodificadoDecodificado = "";
+
+            switch (tipoCodificacao) {
+                case "base64":
+                    if (tipoOperacao === "codificar") {
+                        textoCodificadoDecodificado = btoa(textoOriginal); // Codifica em Base64
+                    } else {
+                        try {
+                            textoCodificadoDecodificado = atob(textoOriginal); // Decodifica de Base64
+                        } catch (error) {
+                            console.error("Erro ao decodificar de Base64:", error);
+                        }
+                    }
+                    break;
+                case "url":
+                    if (tipoOperacao === "codificar") {
+                        textoCodificadoDecodificado = encodeURIComponent(textoOriginal); // Codifica em URL
+                    } else {
+                        try {
+                            textoCodificadoDecodificado = decodeURIComponent(textoOriginal); // Decodifica de URL
+                        } catch (error) {
+                            console.error("Erro ao decodificar de URL:", error);
+                        }
+                    }
+                    break;
+                case "html":
+                    if (tipoOperacao === "codificar") {
+                        const txt = document.createElement("textarea");
+                        txt.innerHTML = textoOriginal;
+                        textoCodificadoDecodificado = txt.innerHTML; // Codifica em HTML
+                    } else {
+                        const txt = document.createElement("textarea");
+                        txt.innerHTML = textoOriginal;
+                        textoCodificadoDecodificado = txt.value; // Decodifica de HTML
+                    }
+                    break;
+                default:
+                    console.error("Tipo de codificação inválido!");
+                    break;
+            }
+
+            document.getElementById("textoCodificadoDecodificado").value = textoCodificadoDecodificado;
+        }
+    </script>
+</body>
+</html>
